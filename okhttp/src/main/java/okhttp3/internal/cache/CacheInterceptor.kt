@@ -58,6 +58,7 @@ class CacheInterceptor(internal val cache: Cache?) : Interceptor {
     }
 
     // If we're forbidden from using the network and the cache is insufficient, fail.
+    // 返回默认的网络请求 504
     if (networkRequest == null && cacheResponse == null) {
       return Response.Builder()
           .request(chain.request())
@@ -71,12 +72,14 @@ class CacheInterceptor(internal val cache: Cache?) : Interceptor {
     }
 
     // If we don't need the network, we're done.
+    // 缓存不为空，则返回缓存
     if (networkRequest == null) {
       return cacheResponse!!.newBuilder()
           .cacheResponse(stripBody(cacheResponse))
           .build()
     }
 
+    // 执行真正的网络请求
     var networkResponse: Response? = null
     try {
       networkResponse = chain.proceed(networkRequest)

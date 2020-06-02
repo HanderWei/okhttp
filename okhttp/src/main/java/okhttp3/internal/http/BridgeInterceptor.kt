@@ -22,9 +22,10 @@ import okhttp3.CookieJar
 import okhttp3.Interceptor
 import okhttp3.Response
 import okhttp3.internal.toHostHeader
-import okhttp3.internal.userAgent
+//import okhttp3.internal.userAgent
 import okio.GzipSource
 import okio.buffer
+import sun.net.www.protocol.http.HttpURLConnection.userAgent
 
 /**
  * Bridges from application code to network code. First it builds a network request from a user
@@ -35,6 +36,7 @@ class BridgeInterceptor(private val cookieJar: CookieJar) : Interceptor {
 
   @Throws(IOException::class)
   override fun intercept(chain: Interceptor.Chain): Response {
+    // 构造Request & Header
     val userRequest = chain.request()
     val requestBuilder = userRequest.newBuilder()
 
@@ -80,6 +82,7 @@ class BridgeInterceptor(private val cookieJar: CookieJar) : Interceptor {
       requestBuilder.header("User-Agent", userAgent)
     }
 
+    // 执行下一个Interceptor [CacheInterceptor]
     val networkResponse = chain.proceed(requestBuilder.build())
 
     cookieJar.receiveHeaders(userRequest.url, networkResponse.headers)

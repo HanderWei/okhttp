@@ -168,9 +168,11 @@ class RealCall(
   }
 
   @Throws(IOException::class)
+  // 构造拦截器
   internal fun getResponseWithInterceptorChain(): Response {
     // Build a full stack of interceptors.
     val interceptors = mutableListOf<Interceptor>()
+    // 拦截器
     interceptors += client.interceptors
     interceptors += RetryAndFollowUpInterceptor(client)
     interceptors += BridgeInterceptor(client.cookieJar)

@@ -50,6 +50,7 @@ import okhttp3.internal.http2.ConnectionShutdownException
  * This interceptor recovers from failures and follows redirects as necessary. It may throw an
  * [IOException] if the call was canceled.
  */
+// Follow Up 跟进；继续做某事
 class RetryAndFollowUpInterceptor(private val client: OkHttpClient) : Interceptor {
 
   @Throws(IOException::class)
